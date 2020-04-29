@@ -27,10 +27,10 @@ impl Error for MessageParsingError {
 
 #[derive(Debug)]
 pub struct Message<'a> {
-    tags: Option<&'a str>,
-    prefix: Option<&'a str>,
-    command: Option<&'a str>,
-    params: Vec<&'a str>
+    pub tags: Option<&'a str>,
+    pub prefix: Option<&'a str>,
+    pub command: Option<&'a str>,
+    pub params: Vec<&'a str>
 }
 
 impl<'a> Message<'a> {
