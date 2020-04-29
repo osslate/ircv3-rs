@@ -182,6 +182,53 @@ fn consume_params<'a>(
     }
 }
 
+/// Parses an IRC protocol message, as defined in RFC1459 and extended by
+/// IRCv3 message-tags.
+/// 
+/// Returns a [Message](ircv3::parsers::message::Message) struct.
+/// 
+/// # Arguments
+/// 
+/// - `line` - a string of characters complying with the extended IRCv3
+///   message-tags pseudo-BNF (minus `<crlf>`).
+/// 
+/// # Examples
+/// ## Parsing a PRIVMSG
+/// 
+/// ```
+/// let line = ":fionn!fionn@sigkell.xyz PRIVMSG #chan :Hello, world!";
+/// let result = parse_line(line);
+/// 
+/// match result {
+///     Ok(message) => {
+///         println!("{} said '{}' in {}!",
+///             message.prefix.unwrap(),
+///             message.params[1],
+///             message.params[0]
+///         )
+///         // "fionn!fionn@sigkell.xyz said 'Hello, world!' in #chan!"
+///     },
+///     _ => {}
+/// }
+/// ```
+/// 
+/// ## Parsing a tagged message
+/// 
+/// ```
+/// let line = "@date=2020;another=tag :fionn!fionn@sigkell.xyz TAGMSG";
+/// let result = parse_line(line);
+/// 
+/// match result {
+///     Ok(message) => {
+///         println!("Got {} with tags '{}'",
+///             message.command.unwrap(),
+///             message.tags.unwrap()
+///         )
+///         // "Got TAGMSG with tags 'date=2020;another=tag'"
+///     },
+///     _ => {}
+/// }
+/// ```
 pub fn parse_line(line: &str) -> Result<Message, MessageParsingError> {
     let mut message = Message::new();
     // obtain the first token. if it begins with 
