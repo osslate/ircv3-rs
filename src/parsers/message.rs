@@ -175,8 +175,8 @@ fn consume_params<'a>(
             }
         },
         None => {
-            let desc = "";
-            let err = MessageParsingError::new("expected ");
+            let desc = "expected data, got nothing";
+            let err = MessageParsingError::new(desc);
             Err(err)
         }
     }
