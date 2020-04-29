@@ -1,4 +1,4 @@
-![](logo.svg | width=200)
+<img src="logo.svg" alt="ircv3-rs logo" width="200" />
 # ircv3-rs
 
 IRCv3-aware parsing library for Rust, with reference IRC client implementation.
