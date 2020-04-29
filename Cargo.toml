@@ -10,5 +10,14 @@ keywords = ["irc", "parsing", "ircv3", "communication", "chat"]
 categories = ["parser-implementations"]
 readme = "README.md"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 [badges]
 travis-ci = { repository = "...", branch = "master" }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"
+
+[target.'cfg(target_arch = "wasm32")'.dev-dependencies]
+wasm-bindgen-test = "0.2"
