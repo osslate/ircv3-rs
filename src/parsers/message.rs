@@ -118,7 +118,8 @@ fn identify_token<'a>(
                     if first_token {
                         Ok(Token::Tags(&seq[1..seq.len()]))
                     } else {
-                        Err(MessageParsingError::new("fuckity"))
+                        let desc = "message-tags are invalid here";
+                        Err(MessageParsingError::new(desc))
                     }
                 },
                 // if the first character is a colon, it's the prefix of the
@@ -131,7 +132,8 @@ fn identify_token<'a>(
                     if !first_token {
                         Ok(Token::Command(seq))
                     } else {
-                        Err(MessageParsingError::new("fuck"))
+                        let desc = "expected message-tags or prefix";
+                        Err(MessageParsingError::new(desc))
                     }
                 }
             }
@@ -160,7 +162,7 @@ fn consume_params<'a>(
                 // otherwise,
                 _ => {
                     let (param, remainder) = consume_from_left(seq);
-                    
+
                     match remainder {
                         Some(s) => {
                             Ok((Param::Middle(param.unwrap()), Some(s)))
@@ -173,7 +175,8 @@ fn consume_params<'a>(
             }
         },
         None => {
-            let err = MessageParsingError::new("");
+            let desc = "";
+            let err = MessageParsingError::new("expected ");
             Err(err)
         }
     }
@@ -207,12 +210,11 @@ pub fn parse_line(line: &str) -> Result<Message, MessageParsingError> {
 
     match current {
         None => {
-            let error = MessageParsingError::new("fuck pt. 2");
+            let desc = "unexpected end of message";
+            let error = MessageParsingError::new(desc);
             return Err(error);
         }
-        _ => {
-            
-        }
+        _ => {}
     }
 
     let (raw_token, mut current) = consume_from_left(current.unwrap());
@@ -260,12 +262,11 @@ pub fn parse_line(line: &str) -> Result<Message, MessageParsingError> {
                             (Param::Trailing(p), _) => {
                                 message.add_param(p);
                                 break;
-                            },
-                            _ => {}
+                            }
                         }
                     },
                     Err(err) => {
-
+                        return Err(err);
                     }
                 }
             }
